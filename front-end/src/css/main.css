@@ -1,0 +1,62 @@
+img {
+    max-width: 100% !important;
+}
+
+h2 {
+    margin: 10px 0;
+}
+
+.article-preview {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.article-preview:last-child {
+    border-bottom: 0;
+}
+
+.article-preview-title {
+    line-height: 20px;
+    margin: 10px 0 0;
+}
+
+.article-preview:first-child .article-preview-title {
+    margin-top: 0;
+}
+
+.article-preview-info {
+    font-size: 10px;
+    color: #555;
+}
+
+.article-preview-image {
+    background-position: center center;
+    background-size: 100% auto;
+    height: 150px;
+}
+
+.signup-form .form-group {
+    height: 36px;
+}
+
+.filters.fixed {
+    position: fixed;
+    right: 15px;
+}
+
+.filters .control-label.space {
+    padding-top: 5px;
+}
+
+.filters-buttons {
+    padding-top: 10px;
+}
+
+.filters-buttons .apply {
+    width: 60%;
+}
+
+.filters-buttons .clear {
+    float: right;
+    width: 35%;
+}
