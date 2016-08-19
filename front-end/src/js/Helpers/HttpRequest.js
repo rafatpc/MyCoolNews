@@ -1,3 +1,11 @@
+import HttpData from "../Helpers/HttpData";
+
+function formatParams(data) {
+    return '?' + Object.keys(data).map((key) => {
+        return key + '=' + data[key];
+    }).join('&');
+}
+
 const HttpRequest = function (url, method, callback, data, async) {
     let request = new XMLHttpRequest();
 
@@ -9,6 +17,15 @@ const HttpRequest = function (url, method, callback, data, async) {
 
     if (typeof(data) === 'undefined') {
         data = null;
+    }
+
+    if (data !== null && method === 'GET') {
+        url = url + formatParams(data);
+        data = null;
+    }
+
+    if (data !== null && method === 'POST') {
+        data = HttpData(data);
     }
 
     request.open(method, url, async);

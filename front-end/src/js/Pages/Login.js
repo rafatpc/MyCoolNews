@@ -1,5 +1,4 @@
 import React from "react";
-import HttpData from "../Helpers/HttpData";
 import HttpRequest from "../Helpers/HttpRequest";
 import UserStore from "../Stores/User";
 import Validator from "../Helpers/Validator";
@@ -69,10 +68,7 @@ export default class Login extends React.Component {
             "//api.mycool.news/login",
             "POST",
             this.onResponseLogin.bind(this),
-            HttpData({
-                username,
-                password
-            })
+            { username, password }
         );
 
         e.preventDefault();

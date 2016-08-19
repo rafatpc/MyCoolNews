@@ -1,5 +1,4 @@
 import React from "react";
-import HttpData from "../Helpers/HttpData";
 import HttpRequest from "../Helpers/HttpRequest";
 import UserStore from "../Stores/User";
 import Dispatcher from "../Helpers/Dispatcher";
@@ -81,13 +80,13 @@ export default class SignUp extends React.Component {
             "//api.mycool.news/register",
             "POST",
             this.onResponseRegister.bind(this),
-            HttpData({
+            {
                 username,
                 name,
                 email,
                 password,
                 repassword
-            })
+            }
         );
     }
 
