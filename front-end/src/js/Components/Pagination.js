@@ -1,4 +1,6 @@
 import React from "react";
+import ArticlesStore from "../Stores/Articles";
+import Dispatcher from "../Helpers/Dispatcher";
 import { Link } from "react-router";
 
 
@@ -6,13 +8,21 @@ export default class ArticlePreview extends React.Component {
     constructor(props) {
         super(props);
 
-        let { onNavigate, currentPage, total, perPage } = this.props
+        let { currentPage, total, perPage } = this.props;
 
-        this.onNavigate = onNavigate;
+        this.onPageChanged = this.onPageChanged.bind(this);
         this.state = {
             currentPage,
             maxPage: Math.ceil(total / perPage)
         };
+    }
+
+    componentWillMount() {
+        ArticlesStore.on('PAGE_CHANGED', this.onPageChanged);
+    }
+
+    componentWillUnmount() {
+        ArticlesStore.removeListener('PAGE_CHANGED', this.onPageChanged);
     }
 
     generatePaginator() {
@@ -60,26 +70,28 @@ export default class ArticlePreview extends React.Component {
         }
     }
 
-    navigate(page) {
-        this.onNavigate(page);
-        this.setState({
-            currentPage: page
-        });
-    }
-
     onClickPage(e) {
+        e.preventDefault();
+
         let { target } = e;
         let { page, disabled } = target.dataset;
 
         if (disabled === 'disabled') {
-            e.preventDefault();
             return;
         }
 
-        this.onNavigate(page);
         this.setState({
             currentPage: page
         });
+
+        Dispatcher.dispatch({
+            type: 'PAGINATION_PAGE_CHANGED',
+            payload: page
+        })
+    }
+
+    onPageChanged(currentPage) {
+        this.setState({ currentPage });
     }
 
     render() {

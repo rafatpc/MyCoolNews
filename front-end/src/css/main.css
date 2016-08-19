@@ -60,3 +60,11 @@ h2 {
     float: right;
     width: 35%;
 }
+
+.pagination {
+    margin-top: 0;
+}
+
+.pagination-holder {
+    text-align: center;
+}

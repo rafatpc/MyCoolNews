@@ -2,6 +2,7 @@ import React from "react";
 import ArticlesStore from "../Stores/Articles";
 import ArticlePreview from "../Components/Article/Preview";
 import ArticleFilters from "../Components/Article/Filters";
+import Dispatcher from "../Helpers/Dispatcher";
 import Loading from "../Components/Loading";
 import Pagination from "../Components/Pagination";
 
@@ -12,6 +13,8 @@ export default class Articles extends React.Component {
         let page = props.params.page || 1;
 
         this.onReceivedArticles = this.onReceivedArticles.bind(this);
+        this.onPageChanged = this.onPageChanged.bind(this);
+        this.pageRoute = '#/articles/page/';
         this.state = {
             articles: <Loading />,
             pagination: '',
@@ -23,7 +26,12 @@ export default class Articles extends React.Component {
         ArticlesStore.getPage(page);
     }
 
+    componentWillMount() {
+        ArticlesStore.on("PAGE_CHANGED", this.onPageChanged);
+    }
+
     componentWillUnmount() {
+        ArticlesStore.removeListener("PAGE_CHANGED", this.onPageChanged);
         ArticlesStore.removeListener("ARTICLES_RECEIVED", this.onReceivedArticles);
     }
 
@@ -31,9 +39,7 @@ export default class Articles extends React.Component {
         let pagination = <Pagination total={total}
                                      currentPage={this.state.currentPage}
                                      perPage={this.state.perPage}
-                                     onNavigate={this.onPageChanged.bind(this)}
-                                     route="#/articles/page/"
-                                     key={"pagination_" + this.state.currentPage} />;
+                                     route={this.pageRoute} />;
 
         this.setState({
             articles: data.map(this.mapArticlesData),
@@ -51,12 +57,8 @@ export default class Articles extends React.Component {
         this.setState({
             currentPage: page
         });
-        ArticlesStore.getPage(page);
-    }
 
-    onFiltersCleared() {
-        this.onPageChanged(1);
-        this.context.router.push('/articles/page/1');
+        window.location.hash = this.pageRoute + page;
     }
 
     render() {
