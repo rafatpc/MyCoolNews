@@ -31,13 +31,14 @@ class UserStore extends EventEmitter {
     }
 
     handleActions(action) {
-        switch (action.type) {
-            case "UPDATE_USER_STATUS":
-                this.updateUserState();
-            break;
+        let actions = {
+            UPDATE_USER_STATUS: this.updateUserState
         }
 
-        console.log("Action", action.type, "received", action);
+        if (actions.hasOwnProperty(action.type)) {
+            console.log("[User Store] Action", action.type, "executed", action);
+            actions[action.type](action.payload);
+        }
     }
 }
 

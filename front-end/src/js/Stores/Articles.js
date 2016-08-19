@@ -60,7 +60,16 @@ class ArticlesStore extends EventEmitter {
     }
 
     handleActions(action) {
-        console.log("Action", action.type, "received", action);
+        let actions = {
+            ARTICLES_FILTERS: this.filter.bind(this),
+            ARTICLES_CLEAR_FILTERS: this.clearFilters.bind(this),
+            PAGINATION_PAGE_CHANGED: this.changePage.bind(this)
+        }
+
+        if (actions.hasOwnProperty(action.type)) {
+            console.log("[Articles Store] Action", action.type, "executed", action);
+            actions[action.type](action.payload);
+        }
     }
 }
 
