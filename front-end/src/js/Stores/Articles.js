@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
-import HttpRequest from "../Helpers/HttpRequest";
 import Dispatcher from "../Helpers/Dispatcher";
+import HttpRequest from "../Helpers/HttpRequest";
 
 class ArticlesStore extends EventEmitter {
     constructor() {
@@ -33,18 +33,28 @@ class ArticlesStore extends EventEmitter {
         new HttpRequest(
             "//api.mycool.news/articles/page/" + page,
             "GET",
-            this.onReceivedArticles.bind(this)
+            this.onReceivedArticles.bind(this),
+            this.filters
         );
     }
 
-    clearFilters() {
+    changePage(page) {
+        this.getPage(page);
+        this.emit('PAGE_CHANGED', page)
+    }
 
+    getFilters() {
+        return this.filters;
+    }
+
+    clearFilters() {
+        this.filters = {};
+        this.changePage(1);
     }
 
     filter(params) {
-        // this.filters
-        debugger;
-
+        this.filters = params;
+        this.changePage(1);
     }
 
     onReceivedArticles(articlesResponse) {
@@ -74,9 +84,6 @@ class ArticlesStore extends EventEmitter {
 }
 
 const articlesStore = new ArticlesStore();
-
-window.articlesStore = articlesStore;
-window.dispatcher = Dispatcher;
-
 Dispatcher.register(articlesStore.handleActions.bind(articlesStore));
+
 export default articlesStore;

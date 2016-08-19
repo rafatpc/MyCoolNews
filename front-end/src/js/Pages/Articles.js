@@ -69,7 +69,7 @@ export default class Articles extends React.Component {
                     <div>{this.state.pagination}</div>
                 </div>
                 <div class="col-xs-4">
-                    <ArticleFilters onClearFilters={this.onFiltersCleared.bind(this)} />
+                    <ArticleFilters activeFilters={ArticlesStore.getFilters()} />
                 </div>
             </div>
         );

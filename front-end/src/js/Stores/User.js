@@ -43,8 +43,6 @@ class UserStore extends EventEmitter {
 }
 
 const userStore = new UserStore();
-
-window.userStore = userStore;
-
 Dispatcher.register(userStore.handleActions.bind(userStore));
+
 export default userStore;

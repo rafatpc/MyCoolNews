@@ -1,38 +1,55 @@
 import React from "react";
-import ArticlesStore from "../../Stores/Articles";
+import Dispatcher from "../../Helpers/Dispatcher";
 import getNodeById from "../../Helpers/Functions";
 
 export default class ArticleFilters extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            from: null,
-            to: null,
-            author: 0
-        }
+        let { activeFilters } = props;
 
-        this.onClearFilters = props.onClearFilters;
+        this.state = {
+            from: activeFilters.from || "2016-06-12", //null,
+            to: activeFilters.to || "2016-09-12", //null,
+            author: activeFilters.author || 0
+        };
     }
 
     onChangeFromDate({ target }) {
         this.setState({
-            from: new Date(target.value)
+            from: target.value
         });
     }
 
     onChangeToDate({ target }) {
         this.setState({
-            to: new Date(target.value)
+            to: target.value
+        });
+    }
+
+    onChangeAuthor({ target }) {
+        this.setState({
+            author: target.value
         });
     }
 
     onClickApply() {
-        ArticlesStore.filter(this.state);
+        let { author, from, to } = this.state;
+
+        if (author === 0 && from === null && to === null) {
+            return;
+        }
+
+        Dispatcher.dispatch({
+            type: 'ARTICLES_FILTERS',
+            payload: this.state
+        });
     }
 
     onClickClear() {
-        this.onClearFilters();
+        Dispatcher.dispatch({
+            type: 'ARTICLES_CLEAR_FILTERS'
+        });
     }
 
     render() {
@@ -55,7 +72,7 @@ export default class ArticleFilters extends React.Component {
                     <div class="form-group">
                         <label for="author" class="col-xs-12 control-label space">Author</label>
                         <div class="col-xs-12">
-                            <select name="author" class="form-control">
+                            <select name="author" class="form-control" onChange={this.onChangeAuthor.bind(this)}>
                                 <option value="0">All</option>
                                 <option value="1">Liliyan Krumov</option>
                             </select>
